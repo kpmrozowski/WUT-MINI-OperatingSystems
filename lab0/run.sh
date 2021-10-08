@@ -1,0 +1,1 @@
+gcc -Wall -fsanitize=address,undefined -o prog1 prog1.c && ./prog1
