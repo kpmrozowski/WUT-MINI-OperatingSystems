@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <getopt.h>
+
 #define ERR(source) (perror(source),\
 		     fprintf(stderr,"%s:%d\n",__FILE__,__LINE__),\
 		     exit(EXIT_FAILURE))
@@ -12,6 +14,7 @@ void usage(char* pname){
 		 
 int main(int argc, char** argv) {
 
+	int c, i;
 	int x = 1;
 	while ((c = getopt (argc, argv, "t:n:")) != -1)
 		switch (c){
