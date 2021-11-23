@@ -8,7 +8,7 @@ make: *** No rule to make target 'prog23', needed by 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Nov  9 16:04:23 2021
+# Make data base, printed on Tue Nov 23 14:48:23 2021
 
 # Variables
 
@@ -19,7 +19,7 @@ LC_ALL = C
 # environment
 NO_AT_BRIDGE = 1
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/10347/vscode-ipc-880d9bc8-3ff1-4836-beba-5038cd8dbe88.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/10347/vscode-ipc-1b14c49c-d280-4863-aa58-44947e55c687.sock
 # environment
 VSCODE_CWD = /home/samba/mrozowskik
 # environment
@@ -93,13 +93,13 @@ MAKEFILE_LIST := makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 1799
+VSCODE_PID = 1130
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/p21817.mini.pw.edu.pl:@/tmp/.ICE-unix/885,unix/p21817.mini.pw.edu.pl:/tmp/.ICE-unix/885
+SESSION_MANAGER = local/p21817.mini.pw.edu.pl:@/tmp/.ICE-unix/897,unix/p21817.mini.pw.edu.pl:/tmp/.ICE-unix/897
 # automatic
 *F = $(notdir $*)
 # environment
@@ -181,7 +181,7 @@ MAKE_VERSION := 4.3
 # environment
 QT_FONT_DPI = 92
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 1799
+GIO_LAUNCHED_DESKTOP_FILE_PID = 1130
 # environment
 _ = /usr/bin/make
 # environment
@@ -235,7 +235,7 @@ GDMSESSION = mate
 
 # Directories
 
-# . (device 41, inode 355339725): 11 files, no impossibilities.
+# . (device 40, inode 355339725): 11 files, no impossibilities.
 
 # 11 files, no impossibilities in 1 directories.
 
@@ -285,6 +285,7 @@ prog23.c:
 #  File has not been updated.
 
 # Not a target:
+ 
 makefile:
 #  Implicit rule search has been done.
 #  Last modified 2021-11-09 00:01:22.930707649
@@ -297,7 +298,6 @@ makefile:
 #  File has not been updated.
 
 # files hash-table stats:
- 
 # Load=9/1024=1%, Rehash=0, Collisions=0/24=0%
 # VPATH Search Paths
 
@@ -311,6 +311,6 @@ makefile:
 # strcache performance: lookups = 31 / hit rate = 32%
 # hash-table stats:
 # Load=21/8192=0%, Rehash=0, Collisions=0/31=0%
-# Finished Make data base on Tue Nov  9 16:04:23 2021
+# Finished Make data base on Tue Nov 23 14:48:23 2021
 
  
