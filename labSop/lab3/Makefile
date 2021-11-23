@@ -1,6 +1,6 @@
-all: lab2
-lab2: lab2.c
-	gcc -Wall -o lab2 lab2.c
+all: prog16a
+prog16a: prog16a.c
+	gcc -g -Wall -fsanitize=address,undefined -o prog16a prog16a.c
 .PHONY: clean
 clean:
-	rm lab2
+	rm prog16a

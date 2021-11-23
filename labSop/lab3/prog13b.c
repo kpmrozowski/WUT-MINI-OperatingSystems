@@ -44,7 +44,23 @@ int main(int argc, char** argv) {
     n=atoi(argv[1]);
     if(n<=0)  usage(argv[0]);
     create_children(n);
+    
+    while(n>0){
+		sleep(3);
+		pid_t pid;
+		for(;;){
+			pid=waitpid(0, NULL, WNOHANG);
+			if(pid>0) n--;
+			if(0==pid) break;
+			if(0>=pid) {
+				if(ECHILD==errno) break;
+				ERR("waitpid:");
+			}
+		}
+		printf("PARENT: %d processes remain\n",n);
+	}
+    
     return EXIT_SUCCESS;
 }
 
-// soprun prog13a 3
+// soprun prog13b 9

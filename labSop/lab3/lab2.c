@@ -9,6 +9,7 @@
 #include <string.h>
 #include <time.h>
 #include <signal.h>
+
 #define ERR(source) (fprintf(stderr,"%s:%d\n",__FILE__,__LINE__),\
                      perror(source),kill(0,SIGKILL),\
                                      exit(EXIT_FAILURE))
@@ -92,17 +93,17 @@ int main(int argc, char** argv) {
         pid_t pid;
         n = argc;
         if(argc<2) usage(argv[0]);
-		create_children(argc, argv);
-		parent_work();
-		for(;;){
-			pid=waitpid(0, NULL, WNOHANG);
-			if(pid>0) n--;
-			if(0==pid) break;
-			if(0>=pid) {
-				if(ECHILD==errno) break;
-				ERR("waitpid:");
-			}
+	create_children(argc, argv);
+	parent_work();
+	for(;;){
+		pid=waitpid(0, NULL, WNOHANG);
+		if(pid>0) n--;
+		if(0==pid) break;
+		if(0>=pid) {
+			if(ECHILD==errno) break;
+			ERR("waitpid:");
 		}
+	}
         /*sethandler(sig_handler,SIGUSR1);
         pid_t pid;
         if((pid=fork())<0) ERR("fork");
