@@ -5,6 +5,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
+#include <stdbool.h>
+#include <errno.h>
 
 #define MAXLINE 4096
 #define DEFAULT_T 9
@@ -13,6 +16,7 @@
 #define ERR(source) (perror(source),\
                      fprintf(stderr,"%s:%d\n",__FILE__,__LINE__),\
                      exit(EXIT_FAILURE))
+#define ELAPSED(start,end) ((end).tv_sec-(start).tv_sec)+(((end).tv_nsec - (start).tv_nsec) * 1.0e-9)
 
 typedef unsigned int UINT;
 typedef struct argsThrower{
@@ -23,12 +27,20 @@ typedef struct argsThrower{
         pthread_mutex_t *mxBuilding;
 } argsThrower_t;
 
+typedef struct timespec timespec_t;
+
 void ReadArguments(int argc, char** argv, int *simulationTime, int *buildingsCount);
 void make_buildings(argsThrower_t *argsArray, int buildingsCount);
-void* thread_work(void* args);
+void thread_work(void* args);
+void msleep(UINT milisec);
+void mainThreadWork(    int *simulationTime, 
+                        int *buildingsCount, 
+                        int *kongPosition, 
+                        int* buildings, 
+                        pthread_mutex_t* mxBuilding);
 
 int main(int argc, char** argv) {
-        int simulationTime, buildingsCount;
+        int simulationTime, buildingsCount, kongPosition=0;
         ReadArguments(argc, argv, &simulationTime, &buildingsCount);
         int buildings[DEFAULT_N];
         pthread_mutex_t mxBuilding[DEFAULT_N];
@@ -46,7 +58,56 @@ int main(int argc, char** argv) {
                 args[i].mxBuilding = mxBuilding;
         }
         make_buildings(args, buildingsCount);
+        mainThreadWork( &simulationTime,
+                        &buildingsCount,
+                        &kongPosition, 
+                        buildings, 
+                        mxBuilding);
+        for (int i = 0; i < buildingsCount; i++) {
+                pthread_cancel(args[i].tid);
+                int err = pthread_join(args[i].tid, NULL);
+                if (err != 0) ERR("Can't join with a thread");
+                printf("joined\n");
+        }
+        printf("final buildings:\t");
+        for (int i = 0; i < buildingsCount; i++) printf("%d   ", buildings[i]);
+        printf("\n");
+        printf("final kong position: \t%d\n", kongPosition);
+        printf("\n");
+        
+        // free(buildings);
+        // free(args);
+        // free(mxBuilding);
+        // free(argv);
+                
         exit(EXIT_SUCCESS);
+}
+void mainThreadWork(    int *simulationTime, 
+                        int *buildingsCount, 
+                        int *kongPosition, 
+                        int* buildings, 
+                        pthread_mutex_t* mxBuilding) {
+        bool jumped = false;
+        int simTime = 0;
+        for (;;) {
+                if (*kongPosition == *buildingsCount || simTime == *simulationTime) break;
+                sleep(1);
+                pthread_mutex_lock(&mxBuilding[*kongPosition]);
+                pthread_mutex_lock(&mxBuilding[*kongPosition+1]);
+                if (buildings[*kongPosition+1] >= buildings[*kongPosition]) jumped = true;
+                pthread_mutex_unlock(&mxBuilding[*kongPosition]);
+                pthread_mutex_unlock(&mxBuilding[*kongPosition+1]);
+                printf("kong position: %d\n", *kongPosition);
+                if (jumped) ++(*kongPosition);
+                printf("buildings:\t");
+                for (int i = 0; i < *buildingsCount; i++)  {
+                        pthread_mutex_lock(&mxBuilding[i]);
+                        printf("%d   ", buildings[i]);
+                        pthread_mutex_unlock(&mxBuilding[i]);
+                }
+                printf("\n");
+                ++simTime;
+        }
 }
 void ReadArguments(int argc, char** argv, int *simulationTime, int *buildingsCount) {
         *simulationTime = DEFAULT_T;
@@ -67,24 +128,31 @@ void ReadArguments(int argc, char** argv, int *simulationTime, int *buildingsCou
         }
 }
 void make_buildings(argsThrower_t *argsArray, int buildingsCount) {
-        pthread_attr_t threadAttr;
-        if(pthread_attr_init(&threadAttr)) ERR("Couldn't create pthread_attr_t");
-        if(pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED)) ERR("Couldn't setdetachsatate on pthread_attr_t");
         for (int i = 0; i < buildingsCount; i++) {
-                if(pthread_create(&argsArray[i].tid, &threadAttr, thread_work, &argsArray[i])) ERR("Couldn't create thread");
+                if(pthread_create(&argsArray[i].tid, NULL, thread_work, &argsArray[i])) ERR("Couldn't create thread");
         }
-        pthread_attr_destroy(&threadAttr);
 }
-void* thread_work(void* voidArgs) {
-    argsThrower_t* args = voidArgs;
-    printf("Created\n");
-    while (1) {
-        pthread_mutex_lock(args->mxBuilding);
-        args->buildings[args->id] += 1;
-        pthread_mutex_unlock(&args->mxBins[binno]);
-        pthread_mutex_lock(args->pmxBallsThrown);
-        (*args->pBallsThrown) += 1;
-        pthread_mutex_unlock(args->pmxBallsThrown);
+void thread_work(void* voidArgs) {
+        pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+        argsThrower_t* args = voidArgs;
+        printf("Created\n");
+        while (1) {
+                if(pthread_mutex_trylock(&args->mxBuilding[args->id])) {
+                        printf("deadlock warning, continue...\n");
+                        continue;
+                };
+                args->buildings[args->id] += 1;
+                pthread_mutex_unlock(&args->mxBuilding[args->id]);
+                msleep(rand() % 401 + 100);
+        }
+        return;
 }
-    return NULL;
+
+void msleep(UINT milisec) {
+    time_t sec= (int)(milisec/1000);
+    milisec = milisec - (sec*1000);
+    timespec_t req= {0};
+    req.tv_sec = sec;
+    req.tv_nsec = milisec * 1000000L;
+    if(nanosleep(&req,&req)) ERR("nanosleep");
 }

@@ -1,6 +1,6 @@
-all: stage1
-stage1: stage1.c
-	gcc -pthread -g -Wall -fsanitize=address,undefined -o stage1 stage1.c
+all: stage2
+stage2: stage2.c
+	gcc -pthread -g -Wall -fsanitize=address,undefined -o stage2 stage2.c
 .PHONY: clean
 clean:
-	rm stage1
+	rm stage2
