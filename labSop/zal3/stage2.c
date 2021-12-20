@@ -8,11 +8,13 @@
 #include <time.h>
 #include <stdbool.h>
 #include <errno.h>
+#include <signal.h>
 
 #define MAXLINE 4096
 #define DEFAULT_T 9
 #define DEFAULT_N 11
 #define NEXT_DOUBLE(seedptr) ((double) rand_r(seedptr) / (double) RAND_MAX)
+#define NEXT_INT(seedptr) rand_r(seedptr)
 #define ERR(source) (perror(source),\
                      fprintf(stderr,"%s:%d\n",__FILE__,__LINE__),\
                      exit(EXIT_FAILURE))
@@ -38,6 +40,7 @@ void mainThreadWork(    int *simulationTime,
                         int *kongPosition, 
                         int* buildings, 
                         pthread_mutex_t* mxBuilding);
+void sig_handler();
 
 int main(int argc, char** argv) {
         int simulationTime, buildingsCount, kongPosition=0;
@@ -63,6 +66,7 @@ int main(int argc, char** argv) {
                         &kongPosition, 
                         buildings, 
                         mxBuilding);
+        // sethandler(sig_handler,SIGALRM);
         for (int i = 0; i < buildingsCount; i++) {
                 pthread_cancel(args[i].tid);
                 int err = pthread_join(args[i].tid, NULL);
@@ -81,6 +85,9 @@ int main(int argc, char** argv) {
         // free(argv);
                 
         exit(EXIT_SUCCESS);
+}
+void alarm_handler() {
+        ;
 }
 void mainThreadWork(    int *simulationTime, 
                         int *buildingsCount, 
@@ -143,7 +150,7 @@ void thread_work(void* voidArgs) {
                 };
                 args->buildings[args->id] += 1;
                 pthread_mutex_unlock(&args->mxBuilding[args->id]);
-                msleep(rand() % 401 + 100);
+                msleep(NEXT_INT(&args->seed) % 401 + 100);
         }
         return;
 }
