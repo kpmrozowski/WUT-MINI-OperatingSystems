@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <string.h>
 #include <time.h>
+#include <signal.h>
 
 #define ERR(source) (fprintf(stderr,"%s:%d\n",__FILE__,__LINE__),\
                      perror(source),kill(0,SIGKILL),\

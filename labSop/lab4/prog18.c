@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
         if (args == NULL) ERR("Malloc error for throwers arguments!");
         srand(time(NULL));
         for (int i = 0; i < throwersCount; i++) {
-                args[i].seed = (UINT) rand();
+                args[i].seed = (UINT) rand(); /// dlaczegu tutaj rzutujemy seed na uint?
                 args[i].pBallsThrown = &ballsThrown;
                 args[i].pBallsWaiting = &ballsWaiting;
                 args[i].bins = bins;

@@ -1,9 +1,9 @@
-all: prog18
-prog18: prog18.c
-	gcc -g -Wall -fsanitize=address,undefined -o prog18 prog18.c -lpthread -lm
+all: dryf_2e
+dryf_2e: dryf_2e.c
+	gcc -g -Wall -fsanitize=address,undefined -o dryf_2e dryf_2e.c -lpthread -lm -lrt
 .PHONY: clean
 clean:
-	rm prog18
+	rm dryf_2e
 CC=gcc
 CFLAGS= -std=gnu99 -Wall -fsanitize=thread,undefined
 LDFLAGS=-fsanitize=thread,undefined
