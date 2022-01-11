@@ -38,6 +38,7 @@ void mainThreadWork(    int *simulationTime,
                         int *kongPosition, 
                         int* buildings, 
                         pthread_mutex_t* mxBuilding);
+void alarmThreadWork();
 
 int main(int argc, char** argv) {
         int simulationTime, buildingsCount, kongPosition=0;
@@ -109,6 +110,11 @@ void mainThreadWork(    int *simulationTime,
                 ++simTime;
         }
 }
+void alarmThread() {
+        while (true) {
+
+        }
+}
 void ReadArguments(int argc, char** argv, int *simulationTime, int *buildingsCount) {
         *simulationTime = DEFAULT_T;
         *buildingsCount = DEFAULT_N;
@@ -143,7 +149,7 @@ void thread_work(void* voidArgs) {
                 };
                 args->buildings[args->id] += 1;
                 pthread_mutex_unlock(&args->mxBuilding[args->id]);
-                msleep(rand() % 401 + 100);
+                msleep(rand_r() % 401 + 100);
         }
         return;
 }

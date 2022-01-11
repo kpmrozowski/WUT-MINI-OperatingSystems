@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'prog15.c', needed by 'prog15'.  Stop.
+ 
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Nov 23 18:26:36 2021
+# Make data base, printed on Tue Jan 11 14:57:01 2022
 
 # Variables
 
@@ -15,43 +17,37 @@ GDK_BACKEND = x11
 # environment
 LC_ALL = C
 # environment
-GNOME_SHELL_SESSION_MODE = ubuntu
+NO_AT_BRIDGE = 1
 # environment
-SNAP_INSTANCE_KEY = 
+VSCODE_IPC_HOOK_EXTHOST = /run/user/10347/vscode-ipc-b4be1613-13d1-48a9-8e3a-d4fd7c340ee2.sock
 # environment
-GJS_DEBUG_OUTPUT = stderr
+VSCODE_CWD = /home/samba/mrozowskik/Documents/OperatingSystems/WUT-MINI-OperatingSystems
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-411d9edb-6d1a-4afb-90dc-a78688de8f38.sock
+WINDOWID = 6291462
 # environment
-LC_NAME = pl_PL.UTF-8
+CLOUDSDK_ROOT_DIR = /opt/google-cloud-sdk
 # environment
-LC_NUMERIC = pl_PL.UTF-8
-# environment
-VSCODE_CWD = /home/kmro
-# environment
-WINDOWPATH = 2
-# environment
-LC_ADDRESS = pl_PL.UTF-8
+GDM_LANG = en_US.utf8
 # default
 MAKE_COMMAND := make
 # environment
-QT_ACCESSIBILITY = 1
+FT2_SUBPIXEL_HINTING = 1
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
-SNAP_INSTANCE_NAME = code
-# environment
-GDK_PIXBUF_MODULEDIR = /snap/code/82/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+VSCODE_BROWSER_CODE_LOADING = bypassHeatCheck
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 .VARIABLES := 
 # environment
-PWD = /home/kmro/Documents/pw_mini/S2/SOP/OperatingSystems/WUT-MINI-OperatingSystems
+PWD = /home/samba/mrozowskik/Documents/OperatingSystems/WUT-MINI-OperatingSystems
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
-XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+MAIL = /var/spool/mail/mrozowskik
+# environment
+OLDPWD = /home/samba/mrozowskik/Documents/OperatingSystems
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -59,211 +55,165 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/kmro/.config/Code/CachedData/ccbaa2d27e38e5afa3e5c21c1c7bef4657064247
+VSCODE_CODE_CACHE_PATH = /home/samba/mrozowskik/.config/Code/CachedData/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa
+# environment
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session0
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/gdm/Xauthority
+XAUTHORITY = /home/samba/mrozowskik/.Xauthority
 # default
 .LOADED := 
 # default
-.INCLUDE_DIRS = /usr/local/include /usr/local/include /usr/include
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # makefile
 MAKEFLAGS = pqrR
 # makefile
-CURDIR := /home/kmro/Documents/pw_mini/S2/SOP/OperatingSystems/WUT-MINI-OperatingSystems
+CURDIR := /home/samba/mrozowskik/Documents/OperatingSystems/WUT-MINI-OperatingSystems
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
-# environment
-LESSOPEN = | /usr/bin/lesspipe %s
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+SSH_AUTH_SOCK = /run/user/10347/keyring/ssh
 # default
 .SHELLFLAGS := -c
 # environment
-XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
+CLOUDSDK_PYTHON = python
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
-VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=6dbfccff-f747-472c-8f3e-12bbfc026dca&iid=6dbfccff-f747-472c-8f3e-12bbfc026dca&sid=6dbfccff-f747-472c-8f3e-12bbfc026dca","uploadToServer":true}
+XDG_SESSION_DESKTOP = mate
 # environment
-XDG_SESSION_DESKTOP = ubuntu
+VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=ecbfc4e0-f6e0-48de-a664-ad3acd71b57d&iid=ecbfc4e0-f6e0-48de-a664-ad3acd71b57d&sid=ecbfc4e0-f6e0-48de-a664-ad3acd71b57d","uploadToServer":true}
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST := Makefile
-# environment
-SNAP_REEXEC = 
 # automatic
 @F = $(notdir $@)
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 48797
+VSCODE_PID = 2989
 # environment
 XDG_SESSION_TYPE = x11
-# environment
-CUDA_PATH = /usr/local/cuda-11.3
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
-# environment
-CUDA = 11.3
-# environment
-SESSION_MANAGER = local/pc:@/tmp/.ICE-unix/1376,unix/pc:/tmp/.ICE-unix/1376
+SESSION_MANAGER = local/p21817.mini.pw.edu.pl:@/tmp/.ICE-unix/884,unix/p21817.mini.pw.edu.pl:/tmp/.ICE-unix/884
 # automatic
 *F = $(notdir $*)
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/10347/bus
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # environment
-NVCC = /usr/local/cuda-11.3/bin/nvcc
+QT_SCALE_FACTOR = 1
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-BREAKPAD_DUMP_LOCATION = /home/kmro/.config/Code/exthost Crash Reports
+BREAKPAD_DUMP_LOCATION = /home/samba/mrozowskik/.config/Code/exthost Crash Reports
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
-# environment
-GNOME_DESKTOP_SESSION_ID = this-is-deprecated
 # makefile
 SHELL = /bin/sh
 # default
 MAKECMDGOALS := all
 # environment
-XMODIFIERS = @im=ibus
+DOTNET_BUNDLE_EXTRACT_BASE_DIR = /home/samba/mrozowskik/.cache/dotnet_bundle_extract
 # environment
-LD_LIBRARY_PATH = /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda-11.3/lib64
+SHLVL = 2
 # environment
-GJS_DEBUG_TOPICS = JS ERROR;JS LOG
-# environment
-SHLVL = 0
+GOOGLE_CLOUD_SDK_HOME = /opt/google-cloud-sdk
 # environment
 MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-SNAP_COOKIE = VOBAY63-2aLo4urfO_GzLEtUV9R35RBALQC6wElnLbC-Xj3db0FB
-# environment
-PATH = /home/kmro/.local/bin:/usr/local/cuda-11.3/bin:/home/kmro/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+PATH = /opt/google-cloud-sdk/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/opt/cuda/bin:/home/samba/mrozowskik/.dotnet/tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 # default
 MAKEFILES := 
 # environment
-LC_MONETARY = pl_PL.UTF-8
+MOTD_SHOWN = pam
 # automatic
 ^F = $(notdir $^)
 # environment
-SNAP_USER_COMMON = /home/kmro/snap/code/common
-# environment
-LC_TIME = pl_PL.UTF-8
-# environment
-SNAP = /snap/code/82
-# environment
-INVOCATION_ID = 64b6081941cd46c1b98ed03075924303
-# environment
-SNAP_REVISION = 82
-# environment
-SNAP_REAL_HOME = /home/kmro
+MATE_DESKTOP_SESSION_ID = this-is-deprecated
 # environment
 VSCODE_LOG_NATIVE = false
-# environment
-USERNAME = kmro
-# environment
-LC_TELEPHONE = pl_PL.UTF-8
-# environment
-LESSCLOSE = /usr/bin/lesspipe %s %s
 # automatic
 ?F = $(notdir $?)
 # environment
-XDG_CURRENT_DESKTOP = Unity
+XDG_SEAT = seat0
 # environment
-LS_COLORS = 
+XDG_CURRENT_DESKTOP = MATE
+# environment
+MKLROOT = /opt/intel/mkl
 # automatic
 +F = $(notdir $+)
 # environment
-DESKTOP_SESSION = ubuntu
+XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
 # environment
-ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
+DESKTOP_SESSION = mate
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = MATE
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
-LOGNAME = kmro
+LOGNAME = mrozowskik
 # environment
-GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
-# environment
-SNAP_ARCH = amd64
+XDG_VTNR = 7
 # makefile
 .DEFAULT_GOAL := all
 # environment
-DISPLAY = :0
+DISPLAY = :0.0
 # environment
-USER = kmro
+GTK_MODULES = canberra-gtk-module
 # environment
-GTK_MODULES = gail:atk-bridge
-# environment
-LIBRARY_PATH = /usr/local/cuda-11.3/lib64:
+USER = mrozowskik
 # default
 MAKE_VERSION := 4.3
 # environment
-DISABLE_WAYLAND = 1
+QT_FONT_DPI = 92
 # environment
-SNAP_DATA = /var/snap/code/82
+_ = /usr/bin/make
 # environment
-SNAP_CONTEXT = VOBAY63-2aLo4urfO_GzLEtUV9R35RBALQC6wElnLbC-Xj3db0FB
+MOZ_PLUGIN_PATH = /usr/lib/mozilla/plugins
 # environment
-MANAGERPID = 1068
+XDG_RUNTIME_DIR = /run/user/10347
 # environment
-LC_MEASUREMENT = pl_PL.UTF-8
+COLORTERM = truecolor
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 48750
-# environment
-SSH_AGENT_PID = 1341
-# environment
-_ = /snap/code/82/usr/share/code/code
-# environment
-LC_PAPER = pl_PL.UTF-8
-# environment
-XDG_RUNTIME_DIR = /run/user/1000
-# environment
-CFLAGS = -I/usr/local/cuda-11.3/include 
-# environment
-GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
-# environment
-GDK_PIXBUF_MODULE_FILE = /home/kmro/snap/code/common/.cache/gdk-pixbuf-loaders.cache
-# environment
-JOURNAL_STREAM = 8:39190
+GTK_OVERLAY_SCROLLING = 0
 # environment
 XDG_SESSION_CLASS = user
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
 # environment
-HOME = /home/kmro
+HOME = /home/samba/mrozowskik
 # environment
-QT_IM_MODULE = ibus
+CLOUDSDK_PYTHON_ARGS = -S
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-f7c2695b-1.62.3-main.sock
+VSCODE_IPC_HOOK = /run/user/10347/vscode-18ddc501-1.59.1-main.sock
 # environment
-SNAP_NAME = code
+TERM = xterm-256color
 # environment
-GSETTINGS_SCHEMA_DIR = /snap/code/82/usr/share/glib-2.0/schemas
+HG = /usr/bin/hg
 # environment
-IM_CONFIG_PHASE = 1
+MATHEMATICA_HOME = /opt/Mathematica/9.0
+# environment
+XDG_SESSION_ID = 2
 # default
 .RECIPEPREFIX := 
 # automatic
 <F = $(notdir $<)
-# environment
-SNAP_VERSION = ccbaa2d2
 # default
 SUFFIXES := 
 # environment
@@ -271,34 +221,27 @@ VSCODE_CLI = 1
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
 # environment
-SNAP_COMMON = /var/snap/code/common
+VTE_VERSION = 6402
+# environment
+LS_OPTIONS = --color=auto
+# environment
+XDG_GREETER_DATA_DIR = /var/lib/lightdm-data/mrozowskik
 # default
-.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
 # environment
-CUDA_HOME = /usr/local/cuda-11.3
+DOTNET_ROOT = /usr/share/dotnet
 # environment
-SNAP_USER_DATA = /home/kmro/snap/code/82
-# environment
-XDG_MENU_PREFIX = gnome-
-# environment
-GDMSESSION = ubuntu
-# environment
-LC_IDENTIFICATION = pl_PL.UTF-8
-# environment
-SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
+GDMSESSION = mate
 # variable set hash-table stats:
-# Load=138/1024=13%, Rehash=0, Collisions=7/168=4%
+# Load=110/1024=11%, Rehash=0, Collisions=10/140=7%
 
- 
-make: *** No rule to make target 'prog15.c', needed by 'prog15'.  Stop.
- 
 # Pattern-specific Variable Values
 
 # No pattern-specific variable values.
 
 # Directories
 
-# . (device 2069, inode 2908221): 10 files, no impossibilities.
+# . (device 41, inode 355080079): 10 files, no impossibilities.
 
 # 10 files, no impossibilities in 1 directories.
 
@@ -311,7 +254,7 @@ make: *** No rule to make target 'prog15.c', needed by 'prog15'.  Stop.
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-11-22 22:39:17.208880431
+#  Last modified 2021-11-23 14:50:06.330941716
 #  File has been updated.
 #  Successfully updated.
 
@@ -366,7 +309,8 @@ all: prog15
 
 # strcache performance: lookups = 30 / hit rate = 36%
 # hash-table stats:
+ 
 # Load=19/8192=0%, Rehash=0, Collisions=0/30=0%
-# Finished Make data base on Tue Nov 23 18:26:36 2021
+# Finished Make data base on Tue Jan 11 14:57:01 2022
 
  

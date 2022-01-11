@@ -1,6 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/kmro/Documents/pw_mini/S2/SOP/OperatingSystems/WUT-MINI-OperatingSystems'
-make: Leaving directory '/home/kmro/Documents/pw_mini/S2/SOP/OperatingSystems/WUT-MINI-OperatingSystems'
+make: Entering directory '/home/samba/mrozowskik/Documents/OperatingSystems/WUT-MINI-OperatingSystems'
+make: Leaving directory '/home/samba/mrozowskik/Documents/OperatingSystems/WUT-MINI-OperatingSystems'
  
 make: *** No rule to make target 'prog15.c', needed by 'prog15'.
  
