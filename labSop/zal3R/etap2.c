@@ -128,7 +128,15 @@ void thread_work(void *voidArgs) {
          k2 = k1;
          k1 = tmp;
       }
+      if (pthread_mutex_lock(&args->mxCell[k1])) {
+         printf("deadlock warning 1, continue...\n");
+         continue;
+      };
       msleep(200);
+      if (pthread_mutex_lock(&args->mxCell[k2])) {
+         printf("deadlock warning 2, continue...\n");
+         continue;
+      };
       printf("Swaper %d k1=%d, k2=%d ", args->id, k1, k2);
       if (args->table[k1] > args->table[k2]) {
          int tmp = args->table[k2];
@@ -136,6 +144,8 @@ void thread_work(void *voidArgs) {
          args->table[k1] = tmp;
       }
       for (int i = 0; i < args->tableSize; i++) printf("%2d ", args->table[i]);
+      pthread_mutex_unlock(&args->mxCell[k1]);
+      pthread_mutex_unlock(&args->mxCell[k2]);
       UINT sleeping_time = WRAP_TO_RANGE(NEXT_INT(&args->seed), 10, 1000);
       printf(" sleeps %u ms...\n", sleeping_time);
       msleep(sleeping_time);

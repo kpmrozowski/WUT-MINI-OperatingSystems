@@ -125,7 +125,7 @@ void thread_work(void *voidArgs) {
       if (k1 == args->tableSize - 1) {
          k1 = 0;
          k2 = args->tableSize - 1;
-      } 
+      }
       // locking access to 2 neighboring cells
       if (pthread_mutex_lock(&args->mxCell[k1])) {
          printf("deadlock warning 1, continue...\n");
