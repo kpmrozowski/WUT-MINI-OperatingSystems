@@ -121,11 +121,14 @@ void thread_work(void *voidArgs) {
    // printf("Created\n");
    while (1) {
       UINT k1 = NEXT_INT(&args->seed) % args->tableSize;
-      UINT k2 = k1 + 1;
-      if (k1 == args->tableSize - 1) {
-         k1 = 0;
-         k2 = args->tableSize - 1;
+      UINT k2 = NEXT_INT(&args->seed) % args->tableSize;
+      if (k1 == k2) continue;
+      if (k2 < k1) {
+         int tmp = k2;
+         k2 = k1;
+         k1 = tmp;
       }
+      msleep(200);
       printf("Swaper %d k1=%d, k2=%d ", args->id, k1, k2);
       if (args->table[k1] > args->table[k2]) {
          int tmp = args->table[k2];
