@@ -24,25 +24,52 @@
 // #define ELAPSED(start,end) ((end).tv_sec-(start).tv_sec)+(((end).tv_nsec -
 // (start).tv_nsec) * 1.0e-9)
 
+volatile sig_atomic_t last_signal = 0;
+
+typedef struct timespec timespec_t;
+
 typedef unsigned int UINT;
 typedef struct argsSwaper {
    pthread_t tid;
    UINT seed;
    int id;
+   int waitingTime;
    int *table;
    int tableSize;
    pthread_mutex_t *mxCell;
+   bool *pQuitFlag;
+   pthread_mutex_t *pmxQuitFlag;
+   bool *pSwappersStartedFlag;
 } argsSwaper_t;
 
-typedef struct timespec timespec_t;
+typedef struct argsSignalHandler {
+   pthread_t tid;
+   sigset_t *pMask;
+   bool *pQuitFlag;
+   pthread_mutex_t *pmxQuitFlag;
+   int *table;
+   int tableSize;
+   pthread_mutex_t *mxCell;
+   int swappersCount;
+   argsSwaper_t *argsSwappers;
+   bool *pSwappersStartedFlag;
+} argsSignalHandler_t;
 
 void ReadArguments(int argc, char **argv, int *tableSize, int *swappersCount, int *waitingTime);
 void make_swapers(argsSwaper_t *argsSwapers, int tableSize);
 void thread_work(void *args);
 void msleep(UINT milisec);
+void* signal_handling(void*);
+void sethandler(void (*f)(int), int sigNo);
+void alarm_handler(int sig);
 
 int main(int argc, char **argv) {
    int tableSize, swappersCount, waitingTime;
+   bool quitFlag = false;
+   bool swappersStartedFlag = false;
+   // pthread_mutex_t mxQuitFlag = PTHREAD_MUTEX_INITIALIZER;
+   pthread_mutex_t mxQuitFlag;
+   pthread_mutex_init(&mxQuitFlag, NULL);
    ReadArguments(argc, argv, &tableSize, &swappersCount, &waitingTime);
    int table[tableSize];
    pthread_mutex_t mxCell[tableSize];
@@ -51,33 +78,58 @@ int main(int argc, char **argv) {
       if (pthread_mutex_init(&mxCell[i], NULL))
          ERR("Couldn't initialize mutex!");
    }
-   argsSwaper_t *args =
+   
+   argsSwaper_t *argsSwappers =
            (argsSwaper_t *) malloc(sizeof(argsSwaper_t) * swappersCount);
-   if (args == NULL)
+   if (argsSwappers == NULL)
       ERR("Malloc error for throwers arguments!");
    // srand(time(NULL));
    srand(SEED);
    for (int i = 0; i < swappersCount; i++) {
-      args[i].seed = (UINT) rand();
-      args[i].id = i;
-      args[i].table = table;
-      args[i].tableSize = tableSize;
-      args[i].mxCell = mxCell;
+      argsSwappers[i].seed = (UINT) rand();
+      argsSwappers[i].id = i;
+      argsSwappers[i].waitingTime = waitingTime;
+      argsSwappers[i].table = table;
+      argsSwappers[i].tableSize = tableSize;
+      argsSwappers[i].mxCell = mxCell;
+      argsSwappers[i].pQuitFlag = &quitFlag;
+      argsSwappers[i].pmxQuitFlag = &mxQuitFlag;
+      argsSwappers[i].pSwappersStartedFlag = &swappersStartedFlag;
    }
+   
+   sigset_t oldMask, newMask;
+   sigemptyset(&newMask);
+   sigaddset(&newMask, SIGINT);
+   sigaddset(&newMask, SIGQUIT);
+   // sigaddset(&newMask, SIGUSR1);
+   // sigaddset(&newMask, SIGALRM);
+   if (pthread_sigmask(SIG_BLOCK, &newMask, &oldMask)) ERR("SIG_BLOCK error");
+   sethandler(SIG_IGN,SIGUSR1);
+   argsSignalHandler_t argsSignal;
+   argsSignal.pMask = &newMask;
+   argsSignal.pQuitFlag = &quitFlag;
+   argsSignal.pmxQuitFlag = &mxQuitFlag;
+   argsSignal.table = table;
+   argsSignal.tableSize = tableSize;
+   argsSignal.mxCell = mxCell;
+   argsSignal.swappersCount = swappersCount;
+   argsSignal.argsSwappers = argsSwappers;
+   argsSignal.pSwappersStartedFlag = &swappersStartedFlag;
+
    printf("\t\t      ");
-   for (int i = 0; i < args->tableSize; i++) printf("%2d ", i);
+   for (int i = 0; i < argsSwappers->tableSize; i++) printf("%2d ", i);
    printf("\n");
-   make_swapers(args, swappersCount);
-   msleep(5000);
-   for (int i = 0; i < swappersCount; i++) {
-      pthread_cancel(args[i].tid);
-      int err = pthread_join(args[i].tid, NULL);
-      if (err != 0)
-         ERR("Can't join with a thread");
-      printf("joined\n");
-   }
+   if (pthread_create(&argsSignal.tid, NULL, signal_handling, &argsSignal))ERR("Couldn't create signal handling thread!");
+   printf("main set alarm\n");
+   // if (kill(0, SIGUSR1)<0)ERR("kill");
+   make_swapers(argsSwappers, swappersCount);
+   printf("main started threads\n");
+   if(pthread_join(argsSignal.tid, NULL)) ERR("Can't join with 'signal handling' thread");
+   printf("SignalHandlern joined");
    for (int i = 0; i < tableSize; i++) printf("%2d ", table[i]);
-   free(args);
+   free(argsSwappers);
+   if (pthread_sigmask(SIG_UNBLOCK, &newMask, &oldMask)) ERR("SIG_UNBLOCK error");
+   printf("main exits\n");
    exit(EXIT_SUCCESS);
 }
 void ReadArguments(int argc, char **argv, int *tableSize, int *swappersCount, int *waitingTime) {
@@ -113,29 +165,25 @@ void make_swapers(argsSwaper_t *argsSwapers, int swappersCount) {
                          &argsSwapers[i]))
          ERR("Couldn't create thread");
    }
+   *argsSwapers[0].pSwappersStartedFlag = true;
 }
 
 void thread_work(void *voidArgs) {
    pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
    argsSwaper_t *args = (argsSwaper_t *) voidArgs;
-   // printf("Created\n");
-   while (1) {
+   bool quitFlag = false;
+   while (!quitFlag) {
       UINT k1 = NEXT_INT(&args->seed) % args->tableSize;
-      UINT k2 = k1 + 1;
-      if (k1 == args->tableSize - 1) {
-         k1 = 0;
-         k2 = args->tableSize - 1;
+      UINT k2 = NEXT_INT(&args->seed) % args->tableSize;
+      if (k1 == k2) continue;
+      if (k2 < k1) {
+         int tmp = k2;
+         k2 = k1;
+         k1 = tmp;
       }
-      // locking access to 2 neighboring cells
-      if (pthread_mutex_lock(&args->mxCell[k1])) {
-         printf("deadlock warning 1, continue...\n");
-         continue;
-      };
-      msleep(2);
-      if (pthread_mutex_lock(&args->mxCell[k2])) {
-         printf("deadlock warning 2, continue...\n");
-         continue;
-      };
+      pthread_mutex_lock(&args->mxCell[k1]);
+      msleep(200);
+      pthread_mutex_lock(&args->mxCell[k2]);
       printf("Swaper %d k1=%d, k2=%d ", args->id, k1, k2);
       if (args->table[k1] > args->table[k2]) {
          int tmp = args->table[k2];
@@ -145,10 +193,17 @@ void thread_work(void *voidArgs) {
       for (int i = 0; i < args->tableSize; i++) printf("%2d ", args->table[i]);
       pthread_mutex_unlock(&args->mxCell[k1]);
       pthread_mutex_unlock(&args->mxCell[k2]);
-      UINT sleeping_time = WRAP_TO_RANGE(NEXT_INT(&args->seed), 10, 1000);
+      if (pthread_mutex_lock(args->pmxQuitFlag)) {
+         printf("deadlock warning 3, continue...\n");
+         continue;
+      };
+      quitFlag = *args->pQuitFlag;
+      pthread_mutex_unlock(args->pmxQuitFlag);
+      UINT sleeping_time = WRAP_TO_RANGE(NEXT_INT(&args->seed), 10, args->waitingTime);
       printf(" sleeps %u ms...\n", sleeping_time);
       msleep(sleeping_time);
    }
+   printf("thread_work finished...\n");
    return;
 }
 
@@ -165,4 +220,66 @@ void msleep(UINT milisec) {
       ERR("nanosleep");
    // printf("2: %lds, %ldms, %lds, %ldms\n", req.tv_sec, req.tv_nsec/1000000,
    // req_rem.tv_sec, req_rem.tv_nsec/1000000);
+}
+
+
+void *signal_handling(void *voidArgs) {
+   argsSignalHandler_t *args = (argsSignalHandler_t *) voidArgs;
+   int signo;
+   srand(time(NULL));
+   for (;;) {
+      if (sigwait(args->pMask, &signo)) ERR("sigwait failed.");
+      switch (signo) {
+      case SIGUSR1:
+         printf("SIGUSR1\n");
+         if (!args->pSwappersStartedFlag){
+            make_swapers(args->argsSwappers, args->swappersCount);
+            printf("signal_handling started threads\n");
+         }
+         break;
+      case SIGUSR2:
+         printf("SIGUSR2\n");
+         for (int i = 0; i < args->tableSize; i++) printf("%2d ", args->table[i]);
+         printf("\n");
+         break;
+      case SIGINT:
+         printf("SIGINT\n");
+         for (int i = 0; i < args->swappersCount; i++) {
+            pthread_cancel(args->argsSwappers[i].tid);
+            int err = pthread_join(args->argsSwappers[i].tid, NULL);
+            if (err != 0)
+               ERR("Can't join with a thread");
+            printf("joined\n");
+         }
+         printf("swappers joined");
+         return NULL;
+      case SIGQUIT:
+         printf("SIGQUIT\n");
+         pthread_mutex_lock(args->pmxQuitFlag);
+         *args->pQuitFlag = true;
+         pthread_mutex_unlock(args->pmxQuitFlag);
+         return NULL;
+      case SIGALRM:
+         printf("SIGALRM 1\n");
+      default:
+         printf("unexpected signal %d\n", signo);
+         exit(1);
+      }
+   }
+   return NULL;
+}
+
+void sethandler(void (*f)(int), int sigNo) {
+   struct sigaction act;
+   memset(&act, 0, sizeof(struct sigaction));
+   act.sa_handler = f;
+   if (-1 == sigaction(sigNo, &act, NULL)) ERR("sigaction");
+}
+void alarm_handler(int sig) {
+   printf("[%d] received signal %d\n", getpid(), sig);
+   last_signal = sig;
+   if (SIGALRM == sig) {
+      printf("SIGALRM 2\n");
+      if (kill(0, SIGINT)<0)ERR("kill");
+   }
 }
