@@ -1,6 +1,6 @@
-all: etap1
-etap1: etap1.c
-	gcc -pthread -g -Wall -fsanitize=address,undefined -o etap1 etap1.c
+all: etap2
+etap2: etap2.c
+	gcc -pthread -g -Wall -fsanitize=address,undefined -o etap2 etap2.c
 .PHONY: clean
 clean:
-	rm etap1
+	rm etap2
