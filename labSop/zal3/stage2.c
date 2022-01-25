@@ -136,12 +136,12 @@ void ReadArguments(int argc, char** argv, int *simulationTime, int *buildingsCou
 }
 void make_buildings(argsThrower_t *argsArray, int buildingsCount) {
         for (int i = 0; i < buildingsCount; i++) {
-                if(pthread_create(&argsArray[i].tid, NULL, thread_work, &argsArray[i])) ERR("Couldn't create thread");
+                if(pthread_create(&argsArray[i].tid, NULL, (void*(*)(void*))thread_work, &argsArray[i])) ERR("Couldn't create thread");
         }
 }
 void thread_work(void* voidArgs) {
         pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-        argsThrower_t* args = voidArgs;
+        argsThrower_t* args = (argsThrower_t*)voidArgs;
         printf("Created\n");
         while (1) {
                 if(pthread_mutex_trylock(&args->mxBuilding[args->id])) {

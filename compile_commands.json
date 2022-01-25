@@ -1,0 +1,5 @@
+[
+    { "directory": "/home/user/llvm/build",
+      "command": "/usr/bin/clang++ -DSOMEDEF=\"With spaces, quotes and \\-es.\" -c -o prog.o prog.c",
+      "file": "*.c" }
+  ]
